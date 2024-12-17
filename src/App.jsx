@@ -7,38 +7,56 @@ function App() {
 	const [starships, setStarships] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const [nextUrl, setNextUrl] = useState(null);
 
-	useEffect(() => {
-		getAllStarships()
+	// Function to fetch starships
+	const fetchStarships = (url = "https://swapi.py4e.com/api/starships/") => {
+		setLoading(true);
+		getAllStarships(url)
 			.then((data) => {
-				setStarships(data); // Set starships data
-				setLoading(false); // Stop global loading
+				setStarships((prev) => [...prev, ...data.results]); // Append new starships
+				setNextUrl(data.next); // Store the next page URL
+				setLoading(false);
 			})
 			.catch((error) => {
 				console.error("Error fetching starships:", error);
 				setError("Failed to load starships. Please try again later.");
 				setLoading(false);
 			});
+	};
+
+	// Initial fetch when the component mounts
+	useEffect(() => {
+		fetchStarships();
 	}, []);
 
 	return (
 		<div className="app-container">
 			<h1>Star Wars Starships</h1>
 
-			{/* Show global loading */}
-			{loading && <p>Loading...</p>}
+			{/* Error Message */}
 			{error && <p className="error">{error}</p>}
 
-			{/* Render Starship Cards */}
+			{/* Starship Cards */}
 			<div className="starships-container">
 				{starships.map((ship, index) => (
 					<StarshipCard
-						key={index}
+						key={index} // Unique key for each card
 						name={ship.name} // Starship name
-						url={ship.url} // Starship URL for fetching details
+						url={ship.url} // API URL for additional details
 					/>
 				))}
 			</div>
+
+			{/* Loading Indicator */}
+			{loading && <p>Loading...</p>}
+
+			{/* Load More Button */}
+			{nextUrl && !loading && (
+				<button className="load-more" onClick={() => fetchStarships(nextUrl)}>
+					Load More Starships
+				</button>
+			)}
 		</div>
 	);
 }

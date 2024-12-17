@@ -1,6 +1,17 @@
 .app-container {
 	text-align: center;
-	margin: 20px;
+	background-color: #000; /* Black background */
+	min-height: 100vh;
+	color: #fff; /* White text */
+	padding: 20px;
+}
+
+h1 {
+	color: #fff; /* White title */
+	font-size: 2.5rem;
+	margin-bottom: 20px;
+	text-transform: uppercase;
+	letter-spacing: 2px;
 }
 
 .starships-container {
@@ -29,4 +40,27 @@
 p {
 	font-size: 1.2rem;
 	text-align: center;
+}
+
+.load-more {
+	background-color: #333;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+	margin: 20px auto;
+	display: block;
+	border-radius: 5px;
+	font-size: 1rem;
+}
+
+.load-more:hover {
+	background-color: #555;
+}
+
+.starships-container {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 20px;
+	padding: 20px;
 }

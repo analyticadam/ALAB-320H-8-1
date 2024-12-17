@@ -2,39 +2,64 @@ import React, { useState } from "react";
 import "./StarshipCard.css";
 
 function StarshipCard({ name, url }) {
-	// State for additional starship details
-	const [details, setDetails] = useState(null);
-	const [loading, setLoading] = useState(false);
+	const [isFlipped, setIsFlipped] = useState(false); // Flip state
+	const [details, setDetails] = useState(null); // Holds starship details
+	const [loading, setLoading] = useState(false); // Loading state
 
-	// Function to fetch starship details when clicked
+	// Fetch details when flipping for the first time
 	const fetchDetails = () => {
-		setLoading(true); // Set loading state to true
-		fetch(url) // Fetch details from the provided URL
-			.then((response) => response.json())
+		if (details || loading) return;
+		setLoading(true);
+		fetch(url)
+			.then((res) => res.json())
 			.then((data) => {
-				setDetails(data); // Update state with fetched details
-				setLoading(false); // Turn off loading state
+				setDetails(data);
+				setLoading(false);
 			})
-			.catch((error) => {
-				console.error("Error fetching starship details:", error);
-				setLoading(false); // Turn off loading state in case of error
+			.catch((err) => {
+				console.error("Error fetching details:", err);
+				setLoading(false);
 			});
 	};
 
-	return (
-		<div className="card" onClick={fetchDetails}>
-			<h2>{name}</h2>
-			{/* Display loading message while fetching */}
-			{loading && <p>Loading...</p>}
+	// Toggle flip and fetch details if needed
+	const handleFlip = () => {
+		if (!isFlipped) fetchDetails();
+		setIsFlipped((prev) => !prev);
+	};
 
-			{/* Display additional details once fetched */}
-			{details && (
-				<div>
-					<p>Model: {details.model}</p>
-					<p>Crew: {details.crew}</p>
-					<p>Passengers: {details.passengers}</p>
+	return (
+		<div className="card-container">
+			<div
+				className={`card ${isFlipped ? "flipped" : ""}`}
+				onClick={handleFlip}
+			>
+				{/* Front Side */}
+				<div className="card-front">
+					<h2>{name}</h2>
 				</div>
-			)}
+
+				{/* Back Side */}
+				<div className="card-back">
+					{loading ? (
+						<p>Loading...</p>
+					) : details ? (
+						<>
+							<p>
+								<strong>Model:</strong> {details.model}
+							</p>
+							<p>
+								<strong>Crew:</strong> {details.crew}
+							</p>
+							<p>
+								<strong>Passengers:</strong> {details.passengers}
+							</p>
+						</>
+					) : (
+						<p>Click to load details</p>
+					)}
+				</div>
+			</div>
 		</div>
 	);
 }
