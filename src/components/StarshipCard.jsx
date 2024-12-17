@@ -1,11 +1,13 @@
-// import React from "react";
+import React from "react";
+import "./StarshipCard.css"; // Import component-specific CSS
 
-// function StarshipCard({ name }) {
-// 	return (
-// 		<div className="card">
-// 			<h2>{name}</h2>
-// 		</div>
-// 	);
-// }
+function StarshipCard({ name, model }) {
+	return (
+		<div className="card">
+			<h2>{name}</h2>
+			<p>Model: {model}</p>
+		</div>
+	);
+}
 
-// export default StarshipCard;
+export default StarshipCard;
