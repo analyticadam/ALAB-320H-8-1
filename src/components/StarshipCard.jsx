@@ -24,26 +24,29 @@ function StarshipCard({ name, url }) {
 
 	// Toggle flip and fetch details if needed
 	const handleFlip = () => {
+		console.log("Card clicked"); // Debugging log
 		if (!isFlipped) fetchDetails();
 		setIsFlipped((prev) => !prev);
 	};
 
+	/* Adjusted JSX structure to enhance click responsiveness */
 	return (
-		<div className="card-container">
-			<div
-				className={`card ${isFlipped ? "flipped" : ""}`}
-				onClick={handleFlip}
-			>
-				{/* Front Side */}
+		<div className="card-container" onClick={handleFlip}>
+			{/* Main card element that flips based on state */}
+			<div className={`card ${isFlipped ? "flipped" : ""}`}>
+				{/* Front side of the card with title */}
 				<div className="card-front">
 					<h2>{name}</h2>
 				</div>
 
-				{/* Back Side */}
+				{/* Back side of the card with additional details */}
 				<div className="card-back">
 					{loading ? (
-						<p>Loading...</p>
+						<p>
+							Loading...
+						</p> /* Show loading message if details are being fetched */
 					) : details ? (
+						/* Display starship details if available */
 						<>
 							<p>
 								<strong>Model:</strong> {details.model}
@@ -56,7 +59,9 @@ function StarshipCard({ name, url }) {
 							</p>
 						</>
 					) : (
-						<p>Click to load details</p>
+						<p>
+							Click to load details
+						</p> /* Prompt user to click to fetch details */
 					)}
 				</div>
 			</div>
